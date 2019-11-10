@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../widgets/emotionface.dart';
+import '../widgets/emotionlist.dart';
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -15,7 +15,58 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    Color backgroundColor;
+    Color gradientColor;
+
+    MaterialColor color1 = Colors.red;
+    MaterialColor color2 = Colors.orange;
+    MaterialColor color3 = Colors.green;
+    backgroundColor = Color.lerp(
+        Color.lerp(color1[200], color2[200], (emotion / 100)),
+        Color.lerp(color2[200], color3[200], (emotion / 100)),
+        (emotion / 100));
+    gradientColor = Color.lerp(
+        Color.lerp(color1[500], color2[500], (emotion / 100)),
+        Color.lerp(color2[500], color3[500], (emotion / 100)),
+        (emotion / 100));
+
+    // if (emotion >= 0 && emotion < 30) {
+    //   color1 = Colors.red;
+    //   color2 = Colors.orange;
+    //   backgroundColor = Color.lerp(color1[200], color2[200], emotion / 30);
+    //   gradientColor = Color.lerp(color1[500], color2[500], emotion / 30);
+    // } else if (emotion >= 30 && emotion < 50) {
+    //   color1 = Colors.orange;
+    //   color2 = Colors.yellow;
+    //   backgroundColor =
+    //       Color.lerp(color1[200], color2[200], (emotion * 50) / 30);
+    //   gradientColor = Color.lerp(color1[500], color2[500], (emotion * 50) / 30);
+    // }
+
+    // backgroundColor = Color.lerp(
+    //     Color.lerp(color1[200], color2[200], emotion / 100),
+    //     Color.lerp(color2[200], color3[200], emotion / 100),
+    //     emotion / 100);
+    // gradientColor = Color.lerp(
+    //     Color.lerp(color1[500], color2[500], emotion / 100),
+    //     Color.lerp(color2[500], color3[500], emotion / 100),
+    //     emotion / 100);
+
     return Scaffold(
+        bottomNavigationBar: BottomNavigationBar(
+          // backgroundColor: Color.fromRGBO(0, 0, 0, 0),
+          currentIndex: 0, // this will be set when a new tab is tapped
+          items: [
+            BottomNavigationBarItem(
+              icon: new Icon(Icons.home),
+              title: new Text('Add Emotion'),
+            ),
+            BottomNavigationBarItem(
+              icon: new Icon(Icons.mail),
+              title: new Text('Charts'),
+            )
+          ],
+        ),
         body: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
@@ -25,14 +76,15 @@ class _HomeState extends State<Home> {
                 end: Alignment.bottomLeft,
                 stops: [0, 1],
                 colors: [
-                  Colors.blue[200],
-                  Colors.blue[500],
+                  backgroundColor,
+                  gradientColor,
                 ],
               ),
             ),
             child: FutureBuilder(
                 future: SharedPreferences.getInstance(),
-                builder: (BuildContext context, AsyncSnapshot<SharedPreferences> prefs) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<SharedPreferences> prefs) {
                   if (prefs.hasData) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,8 +92,12 @@ class _HomeState extends State<Home> {
                         Padding(
                           padding: EdgeInsets.only(top: 50, left: 20),
                           child: Text(
-                            "Hi " + prefs.data.getString("Name") + ",",
-                            style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.w700, fontFamily: "Playfair"),
+                            "Hello " + prefs.data.getString("Name"),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 50,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: "Playfair"),
                             textAlign: TextAlign.left,
                           ),
                         ),
@@ -49,21 +105,40 @@ class _HomeState extends State<Home> {
                           padding: EdgeInsets.only(left: 50),
                           child: Text(
                             "How do you feel?",
-                            style: TextStyle(color: Colors.white, fontSize: 35, fontWeight: FontWeight.w700, fontFamily: "Playfair"),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 35,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: "Playfair"),
                             textAlign: TextAlign.left,
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.only(top: 50),
-                          child: EmotionFace(emotion)
-                        ),
+                            padding: EdgeInsets.only(top: 50),
+                            child: EmotionFace(emotion)),
                         Container(
-                          padding: EdgeInsets.only(top: 10),
-                          child: Slider(min: 1, value: emotion, max: 100, onChanged: (newEmotionValue)
-                          {
-                            setState(()=>emotion=newEmotionValue);
-                          })
-                        )
+                            decoration: new BoxDecoration(
+                                color: Color.alphaBlend(
+                                    backgroundColor, gradientColor),
+                                borderRadius: new BorderRadius.all(
+                                    const Radius.circular(15.0))),
+                            margin: EdgeInsets.only(
+                                top: 10, bottom: 20, left: 15, right: 15),
+                            child: Slider(
+                                activeColor: Color.lerp(
+                                    Color.lerp(Colors.red, Colors.yellow,
+                                        emotion / 100),
+                                    Color.lerp(Colors.yellow,
+                                        Colors.green.shade600, emotion / 100),
+                                    emotion / 100),
+                                // activeColor: Colors.white,
+                                min: 1,
+                                value: emotion,
+                                max: 100,
+                                onChanged: (newEmotionValue) {
+                                  setState(() => emotion = newEmotionValue);
+                                })),
+                        EmotionList(emotion)
                       ],
                     );
                   }
