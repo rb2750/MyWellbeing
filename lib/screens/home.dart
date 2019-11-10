@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../widgets/emotionface.dart';
+
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
 
@@ -48,6 +50,10 @@ class _HomeState extends State<Home> {
                             style: TextStyle(color: Colors.white, fontSize: 35, fontWeight: FontWeight.w700, fontFamily: "Playfair"),
                             textAlign: TextAlign.left,
                           ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(top: 20),
+                          child: EmotionFace(0.75)
                         ),
                       ],
                     );
