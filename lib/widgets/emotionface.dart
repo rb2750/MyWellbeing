@@ -8,7 +8,7 @@ class EmotionFace extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text("FACE ${emotionLevel}")
-      );
+      child: Icon(Icons.face, size: 100)
+    );
   }
 }

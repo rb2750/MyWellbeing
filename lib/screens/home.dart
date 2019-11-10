@@ -11,6 +11,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  double emotion = 50;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,9 +54,16 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.only(top: 20),
-                          child: EmotionFace(0.75)
+                          padding: EdgeInsets.only(top: 50),
+                          child: EmotionFace(emotion)
                         ),
+                        Container(
+                          padding: EdgeInsets.only(top: 10),
+                          child: Slider(min: 1, value: emotion, max: 100, onChanged: (newEmotionValue)
+                          {
+                            setState(()=>emotion=newEmotionValue);
+                          })
+                        )
                       ],
                     );
                   }
