@@ -128,8 +128,24 @@ class _HomeState extends State<Home> {
                         EmotionList(emotion),
                         Spacer(),
                         Container(
-                            margin: EdgeInsets.only(
-                                bottom: 5, left: 5, right: 5),
+                            margin:
+                                EdgeInsets.only(bottom: 5, left: 5, right: 5),
+                            padding: EdgeInsets.only(bottom: 10, top: 10, left: 20),
+                            decoration: BoxDecoration(
+                                color: backgroundColor.withOpacity(0.8),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Text("Selected emotion: Happy",
+                                    style: TextStyle(
+                                        fontSize: 25, color: Colors.white),)
+                              ],
+                            )),
+                        Container(
+                            margin:
+                                EdgeInsets.only(bottom: 5, left: 5, right: 5),
                             padding: EdgeInsets.only(bottom: 5),
                             decoration: BoxDecoration(
                                 color: Colors.blueGrey.withOpacity(0.7),
