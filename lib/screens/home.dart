@@ -21,14 +21,8 @@ class _HomeState extends State<Home> {
     MaterialColor color1 = Colors.red;
     MaterialColor color2 = Colors.orange;
     MaterialColor color3 = Colors.green;
-    backgroundColor = Color.lerp(
-        Color.lerp(color1[200], color2[200], (emotion / 100)),
-        Color.lerp(color2[200], color3[200], (emotion / 100)),
-        (emotion / 100));
-    gradientColor = Color.lerp(
-        Color.lerp(color1[500], color2[500], (emotion / 100)),
-        Color.lerp(color2[500], color3[500], (emotion / 100)),
-        (emotion / 100));
+    backgroundColor = Color.lerp(Color.lerp(color1[200], color2[200], (emotion / 100)), Color.lerp(color2[200], color3[200], (emotion / 100)), (emotion / 100));
+    gradientColor = Color.lerp(Color.lerp(color1[500], color2[500], (emotion / 100)), Color.lerp(color2[500], color3[500], (emotion / 100)), (emotion / 100));
 
     // if (emotion >= 0 && emotion < 30) {
     //   color1 = Colors.red;
@@ -62,17 +56,14 @@ class _HomeState extends State<Home> {
                 end: Alignment.bottomLeft,
                 stops: [0, 1],
                 colors: [
-                  /*backgroundColor,
-                  gradientColor,*/
-                  Colors.blue[200],
-                  Colors.blue[500]
+                  Colors.blue[400],
+                  Colors.blue[700]
                 ],
               ),
             ),
             child: FutureBuilder(
                 future: SharedPreferences.getInstance(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<SharedPreferences> prefs) {
+                builder: (BuildContext context, AsyncSnapshot<SharedPreferences> prefs) {
                   if (prefs.hasData) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,11 +72,7 @@ class _HomeState extends State<Home> {
                           padding: EdgeInsets.only(top: 50, left: 20),
                           child: Text(
                             "Hello " + prefs.data.getString("Name"),
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 50,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: "Playfair"),
+                            style: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.w700/*, fontFamily: "Playfair"*/),
                             textAlign: TextAlign.left,
                           ),
                         ),
@@ -93,31 +80,16 @@ class _HomeState extends State<Home> {
                           padding: EdgeInsets.only(left: 50),
                           child: Text(
                             "How do you feel?",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 35,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: "Playfair"),
+                            style: TextStyle(color: Colors.white, fontSize: 35, fontWeight: FontWeight.w700/*, fontFamily: "Playfair"*/),
                             textAlign: TextAlign.left,
                           ),
                         ),
+                        Container(padding: EdgeInsets.only(top: 50), child: EmotionFace(emotion)),
                         Container(
-                            padding: EdgeInsets.only(top: 50),
-                            child: EmotionFace(emotion)),
-                        Container(
-                            decoration: new BoxDecoration(
-                                color: Color.fromRGBO(200, 200, 200, 0.5),
-                                borderRadius: new BorderRadius.all(
-                                    const Radius.circular(15.0))),
-                            margin: EdgeInsets.only(
-                                top: 10, bottom: 20, left: 15, right: 15),
+                            decoration: new BoxDecoration(color: Color.fromRGBO(200, 200, 200, 0.5), borderRadius: new BorderRadius.all(const Radius.circular(15.0))),
+                            margin: EdgeInsets.only(top: 10, bottom: 20, left: 15, right: 15),
                             child: Slider(
-                                activeColor: Color.lerp(
-                                    Color.lerp(Colors.red, Colors.yellow,
-                                        emotion / 100),
-                                    Color.lerp(Colors.yellow,
-                                        Colors.green.shade600, emotion / 100),
-                                    emotion / 100),
+                                activeColor: Color.lerp(Color.lerp(Colors.red, Colors.yellow, emotion / 100), Color.lerp(Colors.yellow, Colors.green.shade600, emotion / 100), emotion / 100),
                                 // activeColor: Colors.white,
                                 min: 1,
                                 value: emotion,
@@ -128,40 +100,36 @@ class _HomeState extends State<Home> {
                         EmotionList(emotion),
                         Spacer(),
                         Container(
-                            margin:
-                                EdgeInsets.only(bottom: 5, left: 5, right: 5),
-                            padding: EdgeInsets.only(bottom: 10, top: 10, left: 20),
-                            decoration: BoxDecoration(
-                                color: backgroundColor.withOpacity(0.8),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
+                            margin: EdgeInsets.only(bottom: 5, left: 5, right: 5),
+                            padding: EdgeInsets.only(bottom: 10, top: 10, left: 10, right: 10),
+                            decoration: BoxDecoration(color: Colors.blueGrey.withOpacity(0.6), borderRadius: BorderRadius.all(Radius.circular(10))),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                Text("Selected emotion: Happy",
-                                    style: TextStyle(
-                                        fontSize: 25, color: Colors.white),)
+                                Text(
+                                  "Selected emotion: Happy",
+                                  style: TextStyle(fontSize: 25, color: Colors.white70),
+                                ),
+                                Spacer(),
+                                MaterialButton(
+                                    child: Text("Change", style: TextStyle(color: Colors.white)),
+                                    color: /*Colors.green.shade400*/ Color.fromRGBO(backgroundColor.red - 50, backgroundColor.green - 50, backgroundColor.blue - 50, 1),
+                                    onPressed: () {})
                               ],
                             )),
                         Container(
-                            margin:
-                                EdgeInsets.only(bottom: 5, left: 5, right: 5),
+                            margin: EdgeInsets.only(bottom: 5, left: 5, right: 5),
                             padding: EdgeInsets.only(bottom: 5),
-                            decoration: BoxDecoration(
-                                color: Colors.blueGrey.withOpacity(0.7),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
+                            decoration: BoxDecoration(color: Colors.blueGrey.withOpacity(0.7), borderRadius: BorderRadius.all(Radius.circular(10))),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
                                 IconButton(
-                                  icon: Icon(Icons.add_circle,
-                                      color: Colors.white, size: 40),
+                                  icon: Icon(Icons.add_circle, color: Colors.white, size: 40),
                                   onPressed: () {},
                                 ),
                                 IconButton(
-                                  icon: Icon(Icons.pie_chart,
-                                      color: Colors.blueGrey[200], size: 40),
+                                  icon: Icon(Icons.pie_chart, color: Colors.blueGrey[200], size: 40),
                                   onPressed: () {},
                                 ),
                               ],
