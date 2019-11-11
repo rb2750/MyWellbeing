@@ -53,20 +53,6 @@ class _HomeState extends State<Home> {
     //     emotion / 100);
 
     return Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-          // backgroundColor: Color.fromRGBO(0, 0, 0, 0),
-          currentIndex: 0, // this will be set when a new tab is tapped
-          items: [
-            BottomNavigationBarItem(
-              icon: new Icon(Icons.home),
-              title: new Text('Add Emotion'),
-            ),
-            BottomNavigationBarItem(
-              icon: new Icon(Icons.mail),
-              title: new Text('Charts'),
-            )
-          ],
-        ),
         body: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
@@ -76,8 +62,10 @@ class _HomeState extends State<Home> {
                 end: Alignment.bottomLeft,
                 stops: [0, 1],
                 colors: [
-                  backgroundColor,
-                  gradientColor,
+                  /*backgroundColor,
+                  gradientColor,*/
+                  Colors.blue[200],
+                  Colors.blue[500]
                 ],
               ),
             ),
@@ -118,8 +106,7 @@ class _HomeState extends State<Home> {
                             child: EmotionFace(emotion)),
                         Container(
                             decoration: new BoxDecoration(
-                                color: Color.alphaBlend(
-                                    backgroundColor, gradientColor),
+                                color: Color.fromRGBO(200, 200, 200, 0.5),
                                 borderRadius: new BorderRadius.all(
                                     const Radius.circular(15.0))),
                             margin: EdgeInsets.only(
@@ -138,7 +125,31 @@ class _HomeState extends State<Home> {
                                 onChanged: (newEmotionValue) {
                                   setState(() => emotion = newEmotionValue);
                                 })),
-                        EmotionList(emotion)
+                        EmotionList(emotion),
+                        Spacer(),
+                        Container(
+                            margin: EdgeInsets.only(
+                                bottom: 5, left: 5, right: 5),
+                            padding: EdgeInsets.only(bottom: 5),
+                            decoration: BoxDecoration(
+                                color: Colors.blueGrey.withOpacity(0.7),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                IconButton(
+                                  icon: Icon(Icons.add_circle,
+                                      color: Colors.white, size: 40),
+                                  onPressed: () {},
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.pie_chart,
+                                      color: Colors.blueGrey[200], size: 40),
+                                  onPressed: () {},
+                                ),
+                              ],
+                            )),
                       ],
                     );
                   }
