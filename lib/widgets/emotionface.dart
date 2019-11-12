@@ -100,8 +100,8 @@ class SmileyPainter extends CustomPainter {
     // Draw the eyes
 //    canvas.drawCircle(Offset((center.dx - radius / 2) + eyeXOffset, (center.dy - radius / 2) + 8), 12, Paint()..color = Colors.white);
 
-    drawEye(canvas, (center.dx) - 22, center.dy - 20, eyeSmile, eyeCry);
-    drawEye(canvas, (center.dx) + 22, center.dy - 20, eyeSmile, eyeCry);
+    drawEye(canvas, (center.dx) - 22, center.dy - 20, eyeSmile, eyeCry, true);
+    drawEye(canvas, (center.dx) + 22, center.dy - 20, eyeSmile, eyeCry, false);
 
 //    if (smileAmount < 20) {
 //    } else {
@@ -136,22 +136,52 @@ class SmileyPainter extends CustomPainter {
 //    arc(size, canvas);
   }
 
-  void drawEye(canvas, x, y, happy, sad) {
+  void drawEye(canvas, x, y, happy, sad, left) {
+    if (left) {
+      canvas.drawPath(
+          Path()
+            ..moveTo(x - 15, y - 10)
+            ..quadraticBezierTo(x, y - 10 - (lerp(smileAmount / 100, 0, 20)), x + 5, y - 25),
+          Paint()
+            ..isAntiAlias = true
+            ..style = PaintingStyle.stroke
+            ..strokeWidth =5);
+    } else {
+      canvas.drawPath(
+          Path()
+            ..moveTo(x + 15, y - 10)
+            ..quadraticBezierTo(x, y - 10 - (lerp(smileAmount / 100, 0, 20)), x - 5, y - 25),
+          Paint()
+            ..isAntiAlias = true
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 5);
+    }
     if (sad) {
+      y += 5;
+      canvas.drawArc(
+          new Rect.fromLTWH(x - 10, y - 15, 20, 20),
+          Math.pi * 2 + 0.2,
+          Math.pi - 0.4,
+          false,
+          new Paint()
+            ..isAntiAlias = true
+            ..strokeWidth = 4.0
+            ..color = Colors.black
+            ..style = PaintingStyle.stroke);
 //      x -= 10;
-      y += 10;
-      double width = 30;
-      double height = 20;
-      x -= width / 2;
-      Path eyePath = Path()
-        ..moveTo(x, y)
-        ..quadraticBezierTo(x + (width / 2), y - height, x + width, y)
-        ..quadraticBezierTo(x + width, y+10, x + (width / 2), y)
-        ..quadraticBezierTo(x + (width / 2), y, x,y+5)
-        ..quadraticBezierTo(x,y+6, x,y);
-//        ..quadraticBezierTo(x + (width / 2), y - (height / 4), x, y);
-//        ..quadraticBezierTo(x + (width / 2), y - (height / 4), x, y);
-      canvas.drawPath(eyePath, Paint()..style = PaintingStyle.fill);
+//      y += 10;
+//      double width = 30;
+//      double height = 20;
+//      x -= width / 2;
+//      Path eyePath = Path()
+//        ..moveTo(x, y)
+//        ..quadraticBezierTo(x + (width / 2), y - height, x + width, y)
+//        ..quadraticBezierTo(x + width, y+10, x + (width / 2), y)
+//        ..quadraticBezierTo(x + (width / 2), y, x,y+5)
+//        ..quadraticBezierTo(x,y+6, x,y);
+////        ..quadraticBezierTo(x + (width / 2), y - (height / 4), x, y);
+////        ..quadraticBezierTo(x + (width / 2), y - (height / 4), x, y);
+//      canvas.drawPath(eyePath, Paint()..style = PaintingStyle.fill);
     } else if (happy) {
       y += 10;
       canvas.drawArc(
