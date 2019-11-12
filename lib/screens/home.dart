@@ -70,7 +70,7 @@ class _HomeState extends State<Home> {
                       children: <Widget>[
                         Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                           FadeOut(
-                              20,
+                              15,
                               FadeUp(
                                   5,
                                   Padding(
@@ -82,7 +82,7 @@ class _HomeState extends State<Home> {
                                     ),
                                   ))),
                           FadeOut(
-                              20,
+                              15,
                               FadeUp(
                                   10,
                                   Padding(
@@ -95,7 +95,7 @@ class _HomeState extends State<Home> {
                                   ))),
                         ]),
                         FadeUp(
-                            21,
+                            16,
                             Column(
                               children: <Widget>[
                                 Container(padding: EdgeInsets.only(top: 50), child: EmotionFace(emotion)),
