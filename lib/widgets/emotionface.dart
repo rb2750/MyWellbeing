@@ -32,7 +32,10 @@ class SmileyPainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
 
     drawFace(canvas, center, radius, size);
-    drawTear(canvas, center, radius);
+    if(smileAmount<6)
+    {
+      drawTear(canvas, center, radius);
+    }
     drawMouth(canvas, center, radius, size);
     drawEyes(canvas, center, size);
   }
@@ -70,16 +73,14 @@ class SmileyPainter extends CustomPainter {
       ..style = PaintingStyle.fill
       ..isAntiAlias = true
       ..strokeWidth = 4.0;
-    double eyeXOffset = 10;
-    double teareyex = (center.dx + radius / 2) - eyeXOffset;
-    double teareyey = (center.dy - radius / 2) + 8;
-    if (smileAmount < 20) {
-      Path tearpath = Path();
-
-      tearpath.moveTo(teareyex, teareyey);
-      tearpath.quadraticBezierTo(teareyex + 35, teareyey + 5, (teareyex + 20 - smileAmount), teareyey + 5 + (20 - smileAmount));
-      canvas.drawPath(tearpath, tearPaint);
-    }
+    double x = (center.dx + radius / 2) - 5;
+    double y = (center.dy - radius / 2) + 23;
+    canvas.drawPath(
+        Path()
+          ..moveTo(x, y)
+          ..quadraticBezierTo(x + 15, y + 20, x, y + 24)
+          ..quadraticBezierTo(x - 15, y + 20, x, y),
+        tearPaint);
   }
 
   void drawFace(canvas, center, radius, size) {
