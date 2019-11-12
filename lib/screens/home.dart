@@ -58,7 +58,7 @@ class _HomeState extends State<Home> {
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
                 stops: [0, 1],
-                colors: [Colors.blue[400], Colors.blue[700]],
+                colors: [Colors.blue[500], Colors.blue[900]],
               ),
             ),
             child: FutureBuilder(
@@ -98,7 +98,7 @@ class _HomeState extends State<Home> {
                             16,
                             Column(
                               children: <Widget>[
-                                Container(padding: EdgeInsets.only(top: 50), child: EmotionFace(emotion)),
+                                Container(padding: EdgeInsets.only(top: 50), child: EmotionFace(() => emotion)),
                                 Container(
                                     decoration: new BoxDecoration(color: Color.fromRGBO(200, 200, 200, 0.5), borderRadius: new BorderRadius.all(const Radius.circular(15.0))),
                                     margin: EdgeInsets.only(top: 10, bottom: 20, left: 15, right: 15),
