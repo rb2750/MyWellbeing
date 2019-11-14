@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import '../main.dart';
 
 class EmotionList extends StatelessWidget {
   List<Widget> emotions;
-  double emotionLevel;
 
-  EmotionList(this.emotionLevel) {
+  EmotionList() {
+    double emotionLevel = MyWellbeing.emotion;
     emotions = [
       new Emotion(0, 30, emotionLevel, "Very sad", Colors.red[700]),
       new Emotion(20, 50, emotionLevel, "Quite sad", Colors.red[400]),
@@ -45,7 +46,7 @@ class Emotion extends StatelessWidget {
       return new Container(
           decoration: new BoxDecoration(
               borderRadius: new BorderRadius.all(const Radius.circular(15.0)),
-              color: Colors.grey.withAlpha(150)),
+              color: Colors.grey.withAlpha(120)),
           padding: EdgeInsets.only(top: 5, bottom: 5),
           margin: EdgeInsets.only(left: padding, right: padding, bottom: 10),
           width: double.maxFinite,

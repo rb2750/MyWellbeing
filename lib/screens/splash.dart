@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:rect_getter/rect_getter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'home.dart';
+import '../main.dart';
 
 class Splash extends StatefulWidget {
   Splash({Key key}) : super(key: key);
@@ -128,7 +128,7 @@ class _SplashState extends State<Splash> {
                                               setState(() => rect = RectGetter.getRectFromKey(rectGetterKey));
                                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                                 setState(() => rect = rect.inflate(1.3 * MediaQuery.of(context).size.longestSide));
-                                                Future.delayed(animationDuration, () => Navigator.of(context).push(FadeRouteBuilder(page: Home())).then((_) => setState(() => rect = null)));
+                                                Future.delayed(animationDuration, () => Navigator.of(context).push(FadeRouteBuilder(page: MyWellbeing())).then((_) => setState(() => rect = null)));
                                               });
                                             }
                                           },

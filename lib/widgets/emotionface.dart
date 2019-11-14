@@ -2,24 +2,25 @@ import 'package:flutter/material.dart';
 import 'dart:math' as Math;
 
 import 'package:flutter/widgets.dart';
+import '../main.dart';
 
 class EmotionFace extends StatefulWidget {
-  var sliderValue;
+  bool animated;
 
-  EmotionFace(this.sliderValue);
+  EmotionFace({animated = true});
 
   @override
-  EmotionFaceState createState() => EmotionFaceState(this.sliderValue);
+  EmotionFaceState createState() => EmotionFaceState(animated);
 }
 
 class EmotionFaceState extends State<EmotionFace> with SingleTickerProviderStateMixin {
-  var sliderValue;
-  double tearOffset;
+  double tearOffset=0;
+  bool animated;
 
   Animation<double> _animation;
   AnimationController controller;
 
-  EmotionFaceState(this.sliderValue);
+  EmotionFaceState(this.animated);
 
   @override
   void initState() {
@@ -35,26 +36,36 @@ class EmotionFaceState extends State<EmotionFace> with SingleTickerProviderState
         controller.forward();
       }
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    double emotionLevel = sliderValue();
     _animation = Tween(begin: 0.0, end: 1.0).animate(controller)
       ..addListener(() {
+        double emotionLevel = MyWellbeing.emotion;
         if (emotionLevel < 10) {
           setState(() {
             tearOffset = _animation.value;
           });
         }
       });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double emotionLevel = MyWellbeing.emotion;
+    var painter = SmileyPainter(emotionLevel, tearOffset);
+
+    var size = Math.min(140.0, MediaQuery.of(context).size.width / 2.6);
 
     return Center(
       child: Container(
-          width: 140,
-          height: 140,
+          width: size,
+          height: size,
           child: CustomPaint(
-            painter: SmileyPainter(emotionLevel, tearOffset),
+            painter: painter,
           )),
     );
   }
@@ -72,11 +83,11 @@ class SmileyPainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
 
     drawFace(canvas, center, radius, size);
+    drawMouth(canvas, center, radius, size);
+    drawEyes(canvas, center, size);
     if (smileAmount < 6) {
       drawTear(canvas, center, radius);
     }
-    drawMouth(canvas, center, radius, size);
-    drawEyes(canvas, center, size);
   }
 
   void drawEyes(canvas, center, size) {
@@ -93,8 +104,8 @@ class SmileyPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 4.0;
 
-    double paddingX = lerp(smileAmount / 100, 25 /*Very Sad*/, 20 /*Very happy*/); //20;
-    double paddingY = 20;
+    double paddingX = lerp(smileAmount / 100, 25 /*Very Sad*/, lerp(smileAmount / 100, 30/*Middle*/, 20 /*Very happy*/)); //20;
+    double paddingY = 18;
 
     double width = size.width;
     double height = size.width;
@@ -103,36 +114,49 @@ class SmileyPainter extends CustomPainter {
 
     Path path = Path()
       ..moveTo(x + 5, y)
-      ..quadraticBezierTo((width / 2), y + lerp(smileAmount / 100, -20 /*Very Sad*/, 30 /*Very happy*/), (width - paddingX), (y));
+      ..quadraticBezierTo((width / 2), y + lerp(smileAmount / 100, -20, lerp(smileAmount / 100, 0, 30)), (width - paddingX), (y));
 
     canvas.drawPath(path, mouthPaint);
   }
 
   void drawTear(Canvas canvas, center, radius) {
     Paint tearPaint = Paint()
-      ..color = Colors.blue.withAlpha((255 * (1 - tearOffset)).floor())
+      ..color = Colors.blue.withAlpha((255 * lerp(tearOffset, 1, lerp(tearOffset, 0.98, 0))).floor())
       ..style = PaintingStyle.fill
       ..isAntiAlias = true
       ..strokeWidth = 4.0;
-    double x = (center.dx + radius / 2) - 5 + lerp(tearOffset, 0, -20);
-    double y = (center.dy - radius / 2) + 23 + (tearOffset * 30)*3;
-    canvas.rotate(-0.5*tearOffset);
+
+    double maxXOffset = 40;
+
+    double x = (center.dx + radius / 2) - 5 + maxXOffset + lerp(tearOffset, -maxXOffset, lerp(tearOffset, 0, -maxXOffset)); //lerp(tearOffset, 0, -20);
+    double y = (center.dy - radius / 2) + 23 + (tearOffset * 30) * 2;
+
+    double degrees = lerp(tearOffset, -25, 55);
+
+    double rotation = degrees * Math.pi / 180; //-Math.pi*0.4 * distance;
+
+    double width = 15;
+    double height = 20;
+
+    canvas.translate(x, y);
+    canvas.rotate(rotation);
     canvas.drawPath(
         Path()
-          ..moveTo(x, y)
-          ..quadraticBezierTo(x + 15, y + 20, x, y + 24)
-          ..quadraticBezierTo(x - 15, y + 20, x, y)
+//          ..moveTo(x, y)
+          ..quadraticBezierTo(width, height, 0, height * 1.25)
+          ..quadraticBezierTo(-width, height, 0, 0)
 //          ..transform(Matrix4.rotationY(Math.pi).storage)
         ,
         tearPaint);
-    canvas.rotate(0.5*tearOffset);
+    canvas.rotate(-rotation);
+    canvas.translate(-x, -y);
   }
 
   void drawFace(canvas, center, radius, size) {
     final Gradient gradient = new RadialGradient(
       colors: <Color>[
-        Colors.yellow[300],
-        Colors.yellow[800],
+        Colors.yellow[400],
+        Colors.yellow[600],
       ],
       center: Alignment(0.2, 0.2),
       radius: 0.2,
@@ -147,12 +171,12 @@ class SmileyPainter extends CustomPainter {
   }
 
   void drawEyebrows(canvas, x, y, left) {
-    double overallYOffset = -lerp(smileAmount / 100, 0, 5);
+    double overallYOffset = -lerp(smileAmount / 100, 3, lerp(smileAmount / 100, 20, 5)) + 5;
 
     double offsetx1 = 15; //Left of eyebrow x offset
-    double offsety1 = -10 + overallYOffset; //Left of eyebrow y offset
+    double offsety1 = -16 + overallYOffset; //Left of eyebrow y offset
     double offsetx2 = 0; //Middle of eyebrow x offset
-    double offsety2 = -lerp(smileAmount / 100, 0, 20) - 10 + overallYOffset; //Middle of eyebrow y offset
+    double offsety2 = -lerp(smileAmount / 100, 0, 15) - 15 + overallYOffset; //Middle of eyebrow y offset
     double offsetx3 = -5; //Right of eyebrow x offset
     double offsety3 = -25 + overallYOffset; //Right of eyebrow x offset
 
@@ -176,9 +200,9 @@ class SmileyPainter extends CustomPainter {
   void drawEye(canvas, x, y, happy, sad, left) {
     drawEyebrows(canvas, x, y, left);
     if (sad) {
-      y += 5;
+      y += 10;
       canvas.drawArc(
-          new Rect.fromLTWH(x - 10, y - 15, 20, 20),
+          new Rect.fromLTWH(x - 10, y - 15, 20, 17),
           Math.pi * 2 + 0.2,
           Math.pi - 0.4,
           false,
@@ -190,7 +214,7 @@ class SmileyPainter extends CustomPainter {
     } else if (happy) {
       y += 10;
       canvas.drawArc(
-          new Rect.fromLTWH(x - 10, y - 15, 20, 20),
+          new Rect.fromLTWH(x - 10, y - 15, 20, 18),
           Math.pi + 0.2,
           Math.pi - 0.4,
           false,
@@ -205,7 +229,7 @@ class SmileyPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => true;
+  bool shouldRepaint(SmileyPainter oldDelegate) => smileAmount <= 10 || smileAmount != oldDelegate.smileAmount; //Only if crying
 }
 
 double lerp(double t, num min, num max) {
