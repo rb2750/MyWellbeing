@@ -5,22 +5,17 @@ import 'package:flutter/widgets.dart';
 import '../main.dart';
 
 class EmotionFace extends StatefulWidget {
-  bool animated;
-
-  EmotionFace({animated = true});
-
   @override
-  EmotionFaceState createState() => EmotionFaceState(animated);
+  EmotionFaceState createState() => EmotionFaceState();
 }
 
 class EmotionFaceState extends State<EmotionFace> with SingleTickerProviderStateMixin {
   double tearOffset=0;
-  bool animated;
 
   Animation<double> _animation;
   AnimationController controller;
 
-  EmotionFaceState(this.animated);
+  EmotionFaceState();
 
   @override
   void initState() {
