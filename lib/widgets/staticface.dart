@@ -14,7 +14,12 @@ class EmotionFaceState extends StatelessWidget {
   Widget build(BuildContext context) {
     var painter = SmileyPainter(configuration);
 
-    var size = Math.max(configuration.face.minSize, Math.min(configuration.face.maxSize, MediaQuery.of(context).size.width * configuration.face.sizeAsPercentageOfWidth));
+    var size = Math.max(
+        configuration.face.minSize,
+        Math.min(
+            configuration.face.maxSize,
+            MediaQuery.of(context).size.width *
+                configuration.face.sizeAsPercentageOfWidth));
 
     return Center(
       child: Container(
@@ -43,8 +48,10 @@ class SmileyPainter extends CustomPainter {
   }
 
   void drawEyes(canvas, center, size) {
-    drawEye(canvas, center,configuration.eyes.leftEye);
-    drawEye(canvas, center,configuration.eyes.rightEye);
+    drawEye(canvas, center, configuration.eyes.left);
+    drawEye(canvas, center, configuration.eyes.right);
+    drawEyebrow(canvas, center.dx, center.dy, configuration.eyebrows.left);
+    drawEyebrow(canvas, center.dx, center.dy, configuration.eyebrows.right);
   }
 
   void drawMouth(Canvas canvas, Offset center, double radius, Size size) {
@@ -61,36 +68,47 @@ class SmileyPainter extends CustomPainter {
 
     Path path = Path()
       ..moveTo(x + 5, y)
-      ..quadraticBezierTo(center.dx, y + configuration.mouth.pullDownAmount, (size.width - paddingX), (y));
+      ..quadraticBezierTo(center.dx, y + configuration.mouth.pullDownAmount,
+          (size.width - paddingX), (y));
 
     canvas.drawPath(path, mouthPaint);
   }
 
   void drawFace(canvas, center, radius, size) {
-    final paint = Paint()..shader = configuration.face.color.createShader(Rect.fromCircle(center: new Offset(0.0, 0.0), radius: size.width * 2));
+    final paint = Paint()
+      ..shader = configuration.face.color.createShader(Rect.fromCircle(
+          center: new Offset(0.0, 0.0), radius: size.width * 2));
     canvas.drawCircle(center, radius, paint);
   }
 
-  void drawEyebrows(canvas, x, y, left) {
-    double overallYOffset = -lerp(smileAmount / 100, 3, lerp(smileAmount / 100, 20, 5)) + 5;
+  void drawEyebrow(canvas, x, y, Eyebrow eyebrow) {
+    double overallXOffset = eyebrow.offsetFromEyeX;
+    double overallYOffset = eyebrow.offsetFromEyeY;
 
-    double offsetx1 = 15; //Left of eyebrow x offset
-    double offsety1 = -16 + overallYOffset; //Left of eyebrow y offset
-    double offsetx2 = 0; //Middle of eyebrow x offset
-    double offsety2 = -lerp(smileAmount / 100, 0, 15) - 15 + overallYOffset; //Middle of eyebrow y offset
-    double offsetx3 = -5; //Right of eyebrow x offset
-    double offsety3 = -25 + overallYOffset; //Right of eyebrow x offset
+    double offsetx1 = eyebrow.leftOfEyebrowOffsetX +
+        overallXOffset; //Left of eyebrow x offset
+    double offsety1 = eyebrow.leftOfEyebrowOffsetY +
+        overallYOffset; //Left of eyebrow y offset
+    double offsetx2 = eyebrow.middleOfEyebrowOffsetX +
+        overallXOffset; //Middle of eyebrow x offset
+    double offsety2 = eyebrow.middleOfEyebrowOffsetY +
+        overallYOffset; //Middle of eyebrow y offset
+    double offsetx3 = eyebrow.rightOfEyebrowOffsetX +
+        overallXOffset; //Right of eyebrow x offset
+    double offsety3 = eyebrow.rightOfEyebrowOffsetY +
+        overallYOffset; //Right of eyebrow x offset
 
-    if (left) {
-      offsetx1 *= -1;
-      offsetx2 *= -1;
-      offsetx3 *= -1;
-    }
+//    if (left) {
+//      offsetx1 *= -1;
+//      offsetx2 *= -1;
+//      offsetx3 *= -1;
+//    }
 
     canvas.drawPath(
         Path()
           ..moveTo(x + offsetx1, y + offsety1)
-          ..quadraticBezierTo(x + offsetx2, y + offsety2, x + offsetx3, y + offsety3),
+          ..quadraticBezierTo(
+              x + offsetx2, y + offsety2, x + offsetx3, y + offsety3),
         Paint()
           ..isAntiAlias = true
           ..color = Colors.black54
@@ -99,33 +117,21 @@ class SmileyPainter extends CustomPainter {
   }
 
   void drawEye(Canvas canvas, Offset center, Eye eye) {
-    drawEyebrows(canvas, x, y, left);
-    if (sad) {
-      y += 10;
+    if (eye is ArcEye) {
       canvas.drawArc(
-          new Rect.fromLTWH(x - 10, y - 15, 20, 17),
-          Math.pi * 2 + 0.2,
-          Math.pi - 0.4,
+          new Rect.fromLTWH(center.dx + eye.offsetFromCenterX,
+              center.dy + eye.offsetFromCenterY, eye.radiusX, eye.radiusY),
+          eye.startAngleRadians,
+          eye.sweepAngleRadians,
           false,
           new Paint()
             ..isAntiAlias = true
             ..strokeWidth = 4.0
-            ..color = Colors.black
-            ..style = PaintingStyle.stroke);
-    } else if (happy) {
-      y += 10;
-      canvas.drawArc(
-          new Rect.fromLTWH(x - 10, y - 15, 20, 18),
-          Math.pi + 0.2,
-          Math.pi - 0.4,
-          false,
-          new Paint()
-            ..isAntiAlias = true
-            ..strokeWidth = 4.0
-            ..color = Colors.black
+            ..color = eye.color
             ..style = PaintingStyle.stroke);
     } else {
-      canvas.drawCircle(Offset(x, y), 8.0, Paint());
+      canvas.drawCircle(Offset(eye.offsetFromCenterX, eye.offsetFromCenterY),
+          8.0, Paint()..color = eye.color);
     }
   }
 

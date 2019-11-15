@@ -10,6 +10,13 @@ class FaceConfiguration {
 }
 
 class Eyebrows {
+  Eyebrow left;
+  Eyebrow right;
+
+  Eyebrows(this.left, this.right);
+}
+
+class Eyebrow {
   double leftOfEyebrowOffsetX;
   double leftOfEyebrowOffsetY;
   double middleOfEyebrowOffsetX;
@@ -21,40 +28,54 @@ class Eyebrows {
   double offsetFromEyeX;
   double offsetFromEyeY;
 
-  Eyebrows(this.leftOfEyebrowOffsetX, this.leftOfEyebrowOffsetY, this.middleOfEyebrowOffsetX, this.middleOfEyebrowOffsetY, this.rightOfEyebrowOffsetX, this.rightOfEyebrowOffsetY, this.offsetFromEyeX,
-           this.offsetFromEyeY);
+  Eyebrow(
+      this.leftOfEyebrowOffsetX,
+      this.leftOfEyebrowOffsetY,
+      this.middleOfEyebrowOffsetX,
+      this.middleOfEyebrowOffsetY,
+      this.rightOfEyebrowOffsetX,
+      this.rightOfEyebrowOffsetY,
+      this.offsetFromEyeX,
+      this.offsetFromEyeY);
 }
 
 class Eyes {
-  Eye leftEye;
-  Eye rightEye;
+  Eye left;
+  Eye right;
 
-  Eyes(this.leftEye, this.rightEye);
+  Eyes(this.left, this.right);
 }
 
-class Eye
-{
+class Eye {
   Color color;
   double offsetFromCenterX;
   double offsetFromCenterY;
 
-  Eye(this.color,this.offsetFromCenterX,this.offsetFromCenterY);
+  Eye(this.color, this.offsetFromCenterX, this.offsetFromCenterY);
 }
 
-class ArcEye
-{
+class ArcEye extends Eye {
   double radiusX;
   double radiusY;
   double startAngleRadians;
   double sweepAngleRadians;
 
-  ArcEye(this.radiusX, this.radiusY, this.startAngleRadians, this.sweepAngleRadians);
+  ArcEye(
+      this.radiusX,
+      this.radiusY,
+      this.startAngleRadians,
+      this.sweepAngleRadians,
+      Color color,
+      double offsetFromCenterX,
+      double offsetFromCenterY)
+      : super(color, offsetFromCenterX, offsetFromCenterY);
 }
 
 class Mouth {
   double xPadding;
   double yOffsetFromCenter;
-  double pullDownAmount; //How much the center of the mouth is pulled down from its center.
+  double
+      pullDownAmount; //How much the center of the mouth is pulled down from its center.
 
   Mouth(this.xPadding, this.yOffsetFromCenter, this.pullDownAmount);
 }
