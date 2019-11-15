@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_wellbeing/main.dart';
 import 'package:my_wellbeing/widgets/fade.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/emotionface.dart';
 import '../widgets/emotionlist.dart';
 import '../widgets/fade.dart';
@@ -58,7 +57,8 @@ class HomeState extends State<Home> {
             ])),
         FadeUp(
             16,
-            Column(
+            SingleChildScrollView(physics: BouncingScrollPhysics(),
+                child: Column(
               children: <Widget>[
                 Container(padding: EdgeInsets.only(top: 50), child: EmotionFace()),
                 Container(
@@ -76,8 +76,9 @@ class HomeState extends State<Home> {
                           context.ancestorStateOfType(const TypeMatcher<MyWellbeingState>()).setState(() => MyWellbeing.emotion = newEmotionValue);
                         })),
                 EmotionList(),
+                Padding(padding: EdgeInsets.only(bottom: 80),)
               ],
-            ),
+            )),
             animate: firstLaunch),
       ],
     );

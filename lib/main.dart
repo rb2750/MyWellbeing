@@ -7,12 +7,14 @@ import 'screens/home.dart';
 import 'widgets/fade.dart';
 import 'screens/charts.dart';
 import 'screens/splash.dart';
+import 'widgets/emotions.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 void main() => runApp(MyWellbeing());
 
 class MyWellbeing extends StatefulWidget {
   static double emotion = 50;
+  static Emotion selectedEmotion;
   static String name;
 
   MyWellbeing({Key key}) : super(key: key);
@@ -85,31 +87,33 @@ class MyWellbeingState extends State<MyWellbeing> {
                                 Column(
                                   children: <Widget>[
                                     Spacer(),
-                                    Container(
-                                        margin: EdgeInsets.only(bottom: 5, left: 5, right: 5),
-                                        padding: EdgeInsets.all(10),
-                                        decoration: BoxDecoration(color: Colors.blueGrey.withOpacity(0.6), borderRadius: BorderRadius.all(Radius.circular(10))),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            Expanded(
-                                                child: Container(
-                                                    margin: EdgeInsets.only(right: 10),
-                                                    child: AutoSizeText(
-                                                      "Selected emotion: Happy",
-                                                      style: TextStyle(fontSize: 30, color: Colors.white70),
-                                                      maxLines: 1,
-                                                    ))),
-                                            MaterialButton(
-                                                child: Text("Change", style: TextStyle(color: Colors.white)),
-                                                color: Color.fromRGBO(backgroundColor.red - 50, backgroundColor.green - 50, backgroundColor.blue - 50, 1),
-                                                onPressed: () {})
-                                          ],
-                                        )),
+                                    Visibility(
+                                        visible: MyWellbeing.selectedEmotion != null,
+                                        child: Container(
+                                            margin: EdgeInsets.only(bottom: 5, left: 5, right: 5),
+                                            padding: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(color: Colors.blueGrey.shade400.withOpacity(0.75), borderRadius: BorderRadius.all(Radius.circular(10))),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: <Widget>[
+                                                Expanded(
+                                                    child: Container(
+                                                        margin: EdgeInsets.only(right: 10),
+                                                        child: AutoSizeText(
+                                                          "Selected emotion: " + (MyWellbeing.selectedEmotion != null ? MyWellbeing.selectedEmotion.name() : "None"),
+                                                          style: TextStyle(fontSize: 30, color: Colors.white70),
+                                                          maxLines: 1,
+                                                        ))),
+                                                MaterialButton(
+                                                    child: Text("Change", style: TextStyle(color: Colors.white)),
+                                                    color: Color.fromRGBO(backgroundColor.red - 50, backgroundColor.green - 50, backgroundColor.blue - 50, 1),
+                                                    onPressed: () {})
+                                              ],
+                                            ))),
                                     Container(
                                         margin: EdgeInsets.only(bottom: 5, left: 5, right: 5),
                                         padding: EdgeInsets.only(bottom: 5),
-                                        decoration: BoxDecoration(color: Colors.blueGrey.withOpacity(0.7), borderRadius: BorderRadius.all(Radius.circular(10))),
+                                        decoration: BoxDecoration(color: Colors.blueGrey.shade400.withOpacity(0.85), borderRadius: BorderRadius.all(Radius.circular(10))),
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                           children: <Widget>[

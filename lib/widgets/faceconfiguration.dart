@@ -6,7 +6,7 @@ class FaceConfiguration {
   Face face;
   Mouth mouth;
 
-  FaceConfiguration(this.eyebrows, this.eyes, this.face, this.mouth);
+  FaceConfiguration(this.face, this.eyes, this.eyebrows, this.mouth);
 }
 
 class Eyebrows {
@@ -17,26 +17,19 @@ class Eyebrows {
 }
 
 class Eyebrow {
-  double leftOfEyebrowOffsetX;
-  double leftOfEyebrowOffsetY;
-  double middleOfEyebrowOffsetX;
-  double middleOfEyebrowOffsetY;
-  double rightOfEyebrowOffsetX;
-  double rightOfEyebrowOffsetY;
+  double leftOfEyebrowOffsetXPercentage;
+  double leftOfEyebrowOffsetYPercentage;
+  double middleOfEyebrowOffsetXPercentage;
+  double middleOfEyebrowOffsetYPercentage;
+  double rightOfEyebrowOffsetXPercentage;
+  double rightOfEyebrowOffsetYPercentage;
 
   //All these are offsets from the eye itself.
-  double offsetFromEyeX;
-  double offsetFromEyeY;
+  double offsetFromEyeXPercentage;
+  double offsetFromEyeYPercentage;
 
-  Eyebrow(
-      this.leftOfEyebrowOffsetX,
-      this.leftOfEyebrowOffsetY,
-      this.middleOfEyebrowOffsetX,
-      this.middleOfEyebrowOffsetY,
-      this.rightOfEyebrowOffsetX,
-      this.rightOfEyebrowOffsetY,
-      this.offsetFromEyeX,
-      this.offsetFromEyeY);
+  Eyebrow(this.leftOfEyebrowOffsetXPercentage, this.leftOfEyebrowOffsetYPercentage, this.middleOfEyebrowOffsetXPercentage, this.middleOfEyebrowOffsetYPercentage, this.rightOfEyebrowOffsetXPercentage,
+      this.rightOfEyebrowOffsetYPercentage, this.offsetFromEyeXPercentage, this.offsetFromEyeYPercentage);
 }
 
 class Eyes {
@@ -48,59 +41,64 @@ class Eyes {
 
 class Eye {
   Color color;
-  double offsetFromCenterX;
-  double offsetFromCenterY;
+  double offsetFromCenterXPercentage;
+  double offsetFromCenterYPercentage;
+  double radiusPercentage;
 
-  Eye(this.color, this.offsetFromCenterX, this.offsetFromCenterY);
+  Eye(this.color, this.offsetFromCenterXPercentage, this.offsetFromCenterYPercentage, this.radiusPercentage);
 }
 
 class ArcEye extends Eye {
-  double radiusX;
-  double radiusY;
+  double radiusXPercentage;
+  double radiusYPercentage;
   double startAngleRadians;
   double sweepAngleRadians;
 
-  ArcEye(
-      this.radiusX,
-      this.radiusY,
-      this.startAngleRadians,
-      this.sweepAngleRadians,
-      Color color,
-      double offsetFromCenterX,
-      double offsetFromCenterY)
-      : super(color, offsetFromCenterX, offsetFromCenterY);
+  ArcEye(this.radiusXPercentage, this.radiusYPercentage, this.startAngleRadians, this.sweepAngleRadians, Color color, double offsetFromCenterX, double offsetFromCenterY, double radius)
+      : super(color, offsetFromCenterX, offsetFromCenterY, radius);
 }
 
 class Mouth {
-  double xPadding;
-  double yOffsetFromCenter;
-  double
-      pullDownAmount; //How much the center of the mouth is pulled down from its center.
+  double xPaddingPercentage;
+  double yOffsetFromCenterPercentage;
+  double pullDownAmountPercentage; //How much the center of the mouth is pulled down from its center.
 
-  Mouth(this.xPadding, this.yOffsetFromCenter, this.pullDownAmount);
+  Mouth(this.xPaddingPercentage, this.yOffsetFromCenterPercentage, this.pullDownAmountPercentage);
 }
 
 class Face {
-  int minSize;
-  int maxSize;
   double sizeAsPercentageOfWidth;
-  Gradient color;
+  Gradient gradient;
 
-  Face(this.minSize, this.maxSize, this.sizeAsPercentageOfWidth, this.color);
+  Face(this.sizeAsPercentageOfWidth, this.gradient);
+
+  Face.fromColor(double sizeAsPercentageOfWidth, Color from,Color to)
+  {
+    this.sizeAsPercentageOfWidth=sizeAsPercentageOfWidth;
+    this.gradient=new RadialGradient(
+      colors: <Color>[
+        from,
+        to,
+      ],
+      center: Alignment(0.2, 0.2),
+      radius: 0.2,
+      tileMode: TileMode.clamp,
+      stops: [
+        0,
+        0.7,
+      ],
+    );
+  }
 }
 
-class FaceDefaults {
-  static Gradient defaultGradient = new RadialGradient(
-    colors: <Color>[
-      Colors.yellow[400],
-      Colors.yellow[600],
-    ],
-    center: Alignment(0.2, 0.2),
-    radius: 0.2,
-    tileMode: TileMode.clamp,
-    stops: [
-      0,
-      0.7,
-    ],
-  );
+class DefaultHappyFace extends FaceConfiguration {
+  DefaultHappyFace(sizeAsPercentageOfWidth)
+      : super(
+            new Face.fromColor(
+                sizeAsPercentageOfWidth,
+                Colors.yellow[400],Colors.yellow[600]),
+            new Eyes(new Eye(Colors.black, -0.13, -0.13, 8.0 / 140.0), new Eye(Colors.black, -0.13, 0.13, 8.0 / 140.0)),
+            new Eyebrows(new Eyebrow(15.0 / 140.0, 16.0 / 140.0, 0.0, 15.0 / 140.0, -5.0 / 140.0, 25.0 / 140.0, -10 / 140.0, -40 / 140.0),
+                new Eyebrow(-15.0 / 140.0, 16.0 / 140.0, 0.0, 15.0 / 140.0, 5.0 / 140.0, 25.0 / 140.0, 10 / 140.0, -40 / 140.0)),
+            new Mouth(25.0 / 140.0, 18.0 / 140.0, 25.0 / 140.0));
 }
