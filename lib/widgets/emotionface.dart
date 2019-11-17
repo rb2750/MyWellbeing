@@ -97,21 +97,31 @@ class SmileyPainter extends CustomPainter {
     Paint mouthPaint = Paint()
       ..color = Colors.black
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 4.0;
+      ..strokeWidth = lerp(smileAmount / 100, 3 /*Very Sad*/, lerp(smileAmount / 100, 0.5/*Middle*/, 4 /*Very happy*/));
+      // ..strokeWidth = 4.0;
 
-    double paddingX = lerp(smileAmount / 100, 25 /*Very Sad*/, lerp(smileAmount / 100, 30/*Middle*/, 20 /*Very happy*/)); //20;
+    double paddingX = lerp(smileAmount / 100, 25 /*Very Sad*/, lerp(smileAmount / 100, 30/*Middle*/, 40 /*Very happy*/)); //20;
     double paddingY = 18;
 
     double width = size.width;
     double height = size.width;
     double x = paddingX;
-    double y = (height / 2) + paddingY + lerp(smileAmount / 100, 10 /*Very Sad*/, 0 /*Very happy*/);
+    double y = (height / 2) + paddingY + lerp(smileAmount / 100, 12 /*Very Sad*/, lerp(smileAmount / 100, 20/*Middle*/, -2 /*Very happy*/));//lerp(smileAmount / 100, 10 /*Very Sad*/, -5 /*Very happy*/);
 
-    Path path = Path()
-      ..moveTo(x + 5, y)
-      ..quadraticBezierTo((width / 2), y + lerp(smileAmount / 100, -20, lerp(smileAmount / 100, 0, 30)), (width - paddingX), (y));
-
-    canvas.drawPath(path, mouthPaint);
+    // Path path = Path()
+    //   ..moveTo(x, y)
+    //   ..quadraticBezierTo((width / 2), y + lerp(smileAmount / 100, -20, lerp(smileAmount / 100, 0, 35)), (width - paddingX), (y));
+canvas.drawArc(
+          new Rect.fromLTWH(x-5, y-15, 70, 30),
+          Math.pi * 2 + 0.2,
+          Math.pi - 0.4,
+          false,
+          new Paint()
+            ..isAntiAlias = true
+            ..strokeWidth = 4.0
+            ..color = Colors.black
+            ..style = PaintingStyle.stroke);
+    // canvas.drawPath(path, mouthPaint);
   }
 
   void drawTear(Canvas canvas, center, radius) {
@@ -166,14 +176,14 @@ class SmileyPainter extends CustomPainter {
   }
 
   void drawEyebrows(canvas, x, y, left) {
-    double overallYOffset = -lerp(smileAmount / 100, 3, lerp(smileAmount / 100, 20, 5)) + 5;
+    double overallYOffset = -lerp(smileAmount / 100, 10, lerp(smileAmount / 100, 20, 14)) + 10;
 
-    double offsetx1 = 15; //Left of eyebrow x offset
-    double offsety1 = -16 + overallYOffset; //Left of eyebrow y offset
-    double offsetx2 = 0; //Middle of eyebrow x offset
-    double offsety2 = -lerp(smileAmount / 100, 0, 15) - 15 + overallYOffset; //Middle of eyebrow y offset
+    double offsetx1 = 18; //Left of eyebrow x offset
+    double offsety1 = -13 + overallYOffset; //Left of eyebrow y offset
+    double offsetx2 = 5; //Middle of eyebrow x offset
+    double offsety2 = -lerp(smileAmount / 100, 3, 15) - 10 + overallYOffset; //Middle of eyebrow y offset
     double offsetx3 = -5; //Right of eyebrow x offset
-    double offsety3 = -25 + overallYOffset; //Right of eyebrow x offset
+    double offsety3 = -22 + overallYOffset; //Right of eyebrow y offset
 
     if (left) {
       offsetx1 *= -1;
@@ -207,11 +217,12 @@ class SmileyPainter extends CustomPainter {
             ..color = Colors.black
             ..style = PaintingStyle.stroke);
     } else if (happy) {
+      if(left) x -= 4;
       y += 10;
       canvas.drawArc(
-          new Rect.fromLTWH(x - 10, y - 15, 20, 18),
-          Math.pi + 0.2,
-          Math.pi - 0.4,
+          new Rect.fromLTWH(x - 10, y - 15, 21, 17),
+          Math.pi,
+          Math.pi,
           false,
           new Paint()
             ..isAntiAlias = true

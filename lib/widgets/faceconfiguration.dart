@@ -54,8 +54,8 @@ class ArcEye extends Eye {
   double startAngleRadians;
   double sweepAngleRadians;
 
-  ArcEye(this.radiusXPercentage, this.radiusYPercentage, this.startAngleRadians, this.sweepAngleRadians, Color color, double offsetFromCenterX, double offsetFromCenterY, double radius)
-      : super(color, offsetFromCenterX, offsetFromCenterY, radius);
+  ArcEye(this.radiusXPercentage, this.radiusYPercentage, this.startAngleRadians, this.sweepAngleRadians, Color color, double offsetFromCenterX, double offsetFromCenterY)
+      : super(color, offsetFromCenterX, offsetFromCenterY, radiusXPercentage);
 }
 
 class Mouth {

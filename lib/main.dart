@@ -16,6 +16,7 @@ class MyWellbeing extends StatefulWidget {
   static double emotion = 50;
   static Emotion selectedEmotion;
   static String name;
+  static bool firstLaunch = false;
 
   MyWellbeing({Key key}) : super(key: key);
 
@@ -25,11 +26,10 @@ class MyWellbeing extends StatefulWidget {
 
 class MyWellbeingState extends State<MyWellbeing> {
   int currentPage = 0;
-  bool firstLaunch = false;
   PageController _controller;
 
   MyWellbeingState() {
-    firstLaunch = true;
+    MyWellbeing.firstLaunch = true;
     _controller = PageController(initialPage: currentPage, keepPage: false)
       ..addListener(() {
         setState(() {
@@ -44,8 +44,7 @@ class MyWellbeingState extends State<MyWellbeing> {
 
   @override
   Widget build(BuildContext context) {
-    bool fl = firstLaunch;
-    firstLaunch = false;
+    bool fl = MyWellbeing.firstLaunch;
 
     MaterialColor color1 = Colors.red;
     MaterialColor color2 = Colors.yellow;
@@ -83,7 +82,7 @@ class MyWellbeingState extends State<MyWellbeing> {
                               children: <Widget>[Home(firstLaunch: fl), Charts()],
                             ),
                             FadeUp(
-                                22,
+                                18,
                                 Column(
                                   children: <Widget>[
                                     Spacer(),
@@ -111,7 +110,7 @@ class MyWellbeingState extends State<MyWellbeing> {
                                               ],
                                             ))),
                                     Container(
-                                        margin: EdgeInsets.only(bottom: 5, left: 5, right: 5),
+                                        margin: EdgeInsets.only(bottom: 25, left: 5, right: 5),
                                         padding: EdgeInsets.only(bottom: 5),
                                         decoration: BoxDecoration(color: Colors.blueGrey.shade400.withOpacity(0.85), borderRadius: BorderRadius.all(Radius.circular(10))),
                                         child: Row(
@@ -133,7 +132,8 @@ class MyWellbeingState extends State<MyWellbeing> {
                                         ))
                                   ],
                                 ),
-                                animate: fl)
+                                animate: fl,
+                                onFinish: () => MyWellbeing.firstLaunch = false)
                           ])));
                 } else {
                   widget = Splash();
