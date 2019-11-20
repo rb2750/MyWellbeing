@@ -1,0 +1,2 @@
+Add locations - show map with coloured pointers to say how feeling and when, draw faces on map if possible.
+Ability to say what they were doing at the time?

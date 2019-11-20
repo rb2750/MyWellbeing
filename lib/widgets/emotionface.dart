@@ -111,9 +111,10 @@ class SmileyPainter extends CustomPainter {
     // Path path = Path()
     //   ..moveTo(x, y)
     //   ..quadraticBezierTo((width / 2), y + lerp(smileAmount / 100, -20, lerp(smileAmount / 100, 0, 35)), (width - paddingX), (y));
+double subtract =smileAmount<=50?(50-smileAmount)/50:(smileAmount-50)/50;
 canvas.drawArc(
-          new Rect.fromLTWH(x-5, y-15, 70, 30),
-          Math.pi * 2 + 0.2,
+          new Rect.fromLTWH(x-5, y-15, 70, 30.0-(subtract*30)),
+          Math.pi + 0.2,
           Math.pi - 0.4,
           false,
           new Paint()
