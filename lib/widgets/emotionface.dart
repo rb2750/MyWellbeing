@@ -10,7 +10,7 @@ class EmotionFace extends StatefulWidget {
 }
 
 class EmotionFaceState extends State<EmotionFace> with SingleTickerProviderStateMixin {
-  double tearOffset=0;
+  double tearOffset = 0;
 
   Animation<double> _animation;
   AnimationController controller;
@@ -86,7 +86,7 @@ class SmileyPainter extends CustomPainter {
   }
 
   void drawEyes(canvas, center, size) {
-    bool smiling = smileAmount > 80;
+    bool smiling = smileAmount > 85;
     bool frowning = smileAmount <= 20;
 
     drawEye(canvas, (center.dx) - size.width / 7.5, center.dy - size.height / 7.5, smiling, frowning, true);
@@ -97,31 +97,28 @@ class SmileyPainter extends CustomPainter {
     Paint mouthPaint = Paint()
       ..color = Colors.black
       ..style = PaintingStyle.stroke
-      ..strokeWidth = lerp(smileAmount / 100, 3 /*Very Sad*/, lerp(smileAmount / 100, 0.5/*Middle*/, 4 /*Very happy*/));
-      // ..strokeWidth = 4.0;
+      ..strokeWidth = lerp(smileAmount / 100, 3 /*Very Sad*/, lerp(smileAmount / 100, 0.5 /*Middle*/, 4 /*Very happy*/));
 
-    double paddingX = lerp(smileAmount / 100, 25 /*Very Sad*/, lerp(smileAmount / 100, 30/*Middle*/, 40 /*Very happy*/)); //20;
-    double paddingY = 18;
+    double paddingX = 40; //lerp(smileAmount / 100, 25 /*Very Sad*/, lerp(smileAmount / 100, 30 /*Middle*/, 40 /*Very happy*/)); //20;
+    double paddingY = 23;
 
-    double width = size.width;
     double height = size.width;
     double x = paddingX;
-    double y = (height / 2) + paddingY + lerp(smileAmount / 100, 12 /*Very Sad*/, lerp(smileAmount / 100, 20/*Middle*/, -2 /*Very happy*/));//lerp(smileAmount / 100, 10 /*Very Sad*/, -5 /*Very happy*/);
-
-    // Path path = Path()
-    //   ..moveTo(x, y)
-    //   ..quadraticBezierTo((width / 2), y + lerp(smileAmount / 100, -20, lerp(smileAmount / 100, 0, 35)), (width - paddingX), (y));
-double subtract =smileAmount<=50?(50-smileAmount)/50:(smileAmount-50)/50;
-canvas.drawArc(
-          new Rect.fromLTWH(x-5, y-15, 70, 30.0-(subtract*30)),
-          Math.pi + 0.2,
-          Math.pi - 0.4,
-          false,
-          new Paint()
-            ..isAntiAlias = true
-            ..strokeWidth = 4.0
-            ..color = Colors.black
-            ..style = PaintingStyle.stroke);
+    double y =
+        (height / 2) + paddingY + lerp(smileAmount / 100, 10 /*Very Sad*/, lerp(smileAmount / 100, 20 /*Middle*/, 5 /*Very happy*/)); //lerp(smileAmount / 100, 10 /*Very Sad*/, -5 /*Very happy*/);
+    double subtract = smileAmount <= 50 ? (smileAmount) / 50 : (50 - (smileAmount - 50)) / 50;
+    double smileHeight = 30.0 - (subtract * 30);
+    if (smileAmount > 50) y -= smileHeight / 2;
+    canvas.drawArc(
+        new Rect.fromLTWH(x - 8, y - 15, 77, smileHeight),
+        (Math.pi * (smileAmount <= 50 ? 1 : 2)) + 0.2,
+        Math.pi - 0.4,
+        false,
+        new Paint()
+          ..isAntiAlias = true
+          ..strokeWidth = 4.0
+          ..color = Colors.black
+          ..style = PaintingStyle.stroke);
     // canvas.drawPath(path, mouthPaint);
   }
 
@@ -218,7 +215,7 @@ canvas.drawArc(
             ..color = Colors.black
             ..style = PaintingStyle.stroke);
     } else if (happy) {
-      if(left) x -= 4;
+      if (left) x -= 4;
       y += 10;
       canvas.drawArc(
           new Rect.fromLTWH(x - 10, y - 15, 21, 17),

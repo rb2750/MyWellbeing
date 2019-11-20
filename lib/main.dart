@@ -110,7 +110,7 @@ class MyWellbeingState extends State<MyWellbeing> {
                                               ],
                                             ))),
                                     Container(
-                                        margin: EdgeInsets.only(bottom: 25, left: 5, right: 5),
+                                        margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
                                         padding: EdgeInsets.only(bottom: 5),
                                         decoration: BoxDecoration(color: Colors.blueGrey.shade400.withOpacity(0.85), borderRadius: BorderRadius.all(Radius.circular(10))),
                                         child: Row(
