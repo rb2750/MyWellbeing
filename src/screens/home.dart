@@ -20,7 +20,7 @@ class HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Stack( 
       children: <Widget>[
         Visibility(
             visible: firstLaunch,
@@ -94,8 +94,7 @@ class HomeState extends State<Home> {
                             onChanged: (newEmotionValue) {
                               setState(() => 0);
                               context
-                                  .ancestorStateOfType(
-                                      const TypeMatcher<MyWellbeingState>())
+                                  .findAncestorStateOfType<MyWellbeingState>()
                                   .setState(() =>
                                       MyWellbeing.emotion = newEmotionValue);
                             })),
