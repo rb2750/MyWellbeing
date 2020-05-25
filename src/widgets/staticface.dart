@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as Math;
 
 import 'package:flutter/widgets.dart';
-import 'package:my_wellbeing/widgets/faceconfiguration.dart';
-import '../main.dart';
+import '../widgets/faceconfiguration.dart';
 
 class StaticFace extends StatelessWidget {
   FaceConfiguration configuration;

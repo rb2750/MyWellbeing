@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:my_wellbeing/main.dart';
-import 'package:my_wellbeing/widgets/fade.dart';
+import '../main.dart';
+import '../widgets/fade.dart';
 import '../widgets/emotionface.dart';
 import '../widgets/emotionlist.dart';
-import '../widgets/fade.dart';
 
 class Home extends StatefulWidget {
   bool firstLaunch;
