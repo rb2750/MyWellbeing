@@ -1,11 +1,10 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
-import 'package:my_wellbeing/screens/charts.dart';
+import 'screens/charts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'screens/home.dart';
 import 'widgets/fade.dart';
-import 'screens/charts.dart';
 import 'screens/splash.dart';
 import 'widgets/emotions.dart';
 import 'package:auto_size_text/auto_size_text.dart';
