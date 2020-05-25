@@ -12,7 +12,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 void main() => runApp(MyWellbeing());
 
 class MyWellbeing extends StatefulWidget {
-  static double emotion = 50;
+  static double emotion = 49;
   static Emotion selectedEmotion;
   static String name;
   static bool firstLaunch = false;
