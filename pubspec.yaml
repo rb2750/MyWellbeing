@@ -21,6 +21,14 @@ dev_dependencies:
   keyboard_avoider: ^0.1.2
   rect_getter: ^0.0.1
   shared_preferences: ^0.5.4+1
+  flutter_launcher_icons: "^0.7.3"
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon.bmp"
+  adaptive_icon_foreground: "assets/fg.png"
+  adaptive_icon_background: "#1c7fdc"
 
 flutter:
   fonts:
