@@ -56,6 +56,7 @@ class MyWellbeingState extends State<MyWellbeing> {
 
     return MaterialApp(
         title: 'MyWellbeing',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
